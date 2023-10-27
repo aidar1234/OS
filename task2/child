@@ -1,0 +1,22 @@
+#!/usr/bin/python3
+
+import os
+import sys
+import time
+from datetime import datetime
+
+pid = os.getpid()
+parent_pid = os.getppid()
+
+print('Сhild[' + str(pid) + ']: I am started. My PID '+ str(pid) + '. Parent PID ' + str(parent_pid) + '.')
+
+seconds = int(sys.argv[1])
+time.sleep(seconds)
+
+print('Сhild[' + str(pid) + ']: I am ended. PID '+ str(pid) + '. Parent PID ' + str(parent_pid) + '.')
+
+# четная и нечетная секунда по идее равновероятны
+if datetime.now().second % 2 == 0:
+    exit(0)
+else:
+    exit(1)

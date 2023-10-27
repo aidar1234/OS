@@ -1,0 +1,35 @@
+#!/usr/bin/python3
+
+import os
+import sys
+from random import randrange
+
+def fork(n: int, need_print: bool):
+    i = 0
+    while i < n:
+        child_pid = os.fork()
+        if os.getpid() != parent_pid:
+            rand = randrange(6) + 5
+            os.execl('./child', str(rand), str(rand)) # почему-то первый аргумент не передается, поэтому передаю 2 раза
+        if child_pid == -1:
+            continue
+        if need_print:
+            print('Parent[' + str(parent_pid) + ']: I ran children process with PID ' + str(child_pid) + '.')
+        i += 1
+
+n = int(sys.argv[1])
+
+parent_pid = os.getpid()
+
+fork(n, True)
+
+if os.getpid() == parent_pid:
+    for i in range(n):
+        w = os.wait()
+        print('Parent[' + str(parent_pid) + ']: Child with PID ' + str(w[0]) + ' terminated. Exit Status ' + str(w[1]) + '.')
+        while w[1] != 0:
+            fork(1, False)
+            w = os.wait()
+        i += 1
+    exit(0)
+
